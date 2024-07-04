@@ -8,8 +8,6 @@ let bootcampCode = document.getElementById("bootcampCode");
 let bootcampCodeError = document.getElementById("bootcampCodeError");
 let email = document.getElementById("email");
 let emailError = document.getElementById("emailError");
-let new_birthDate = new Date(birthDate.value);
-let age = calculate_age(new Date(new_birthDate.getUTCFullYear(), new_birthDate.getMonth(), new_birthDate.getDate()));
 function validateForm() {
     event.preventDefault();
     FLnameValidate(fname, fnameError);
@@ -20,7 +18,7 @@ function validateForm() {
     if (FLnameValidate(lname, lnameError) && ageValidate(birthDate, birthDateError) && bootcampCodeValidate(bootcampCode, bootcampCodeError) && emailValidate(email, emailError))
         alert("نام : " + fname.value + '\n' +
             "نام خانوادگی : " + lname.value + '\n' +
-            "سن کاربر: " + age
+            "سن کاربر: " + ageValidate(birthDate, birthDateError)
         )
 }
 function FLnameValidate(flname, flnameError) {
@@ -47,6 +45,8 @@ function calculate_age(dob) {
     return Math.abs(age_dt.getUTCFullYear() - 1970);
 }
 function ageValidate(birthDate, birthDateError) {
+    let new_birthDate = new Date(birthDate.value);
+let age = calculate_age(new Date(new_birthDate.getUTCFullYear(), new_birthDate.getMonth(), new_birthDate.getDate()));
     if (Date.now() - new_birthDate.getTime() < 0) {
         birthDateError.style.display = 'block';
         birthDateError.textContent = "You are not born yet";
@@ -57,7 +57,7 @@ function ageValidate(birthDate, birthDateError) {
     }
     else if (age >= 18) {
         birthDateError.style.display = 'none';
-        return true;
+        return age;
     }
 }
 function bootcampCodeValidate(bootcampCode, bootcampCodeError) {
