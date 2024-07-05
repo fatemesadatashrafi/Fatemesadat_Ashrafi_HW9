@@ -9,16 +9,18 @@ let bootcampCodeError = document.getElementById("bootcampCodeError");
 let email = document.getElementById("email");
 let emailError = document.getElementById("emailError");
 function validateForm() {
+    let new_birthDate = new Date(birthDate.value);
+    let age = calculate_age(new Date(new_birthDate.getUTCFullYear(), new_birthDate.getMonth(), new_birthDate.getDate()));
     event.preventDefault();
     FLnameValidate(fname, fnameError);
     FLnameValidate(lname, lnameError);
-    ageValidate(birthDate, birthDateError);
+    ageValidate(age, new_birthDate, birthDateError);
     bootcampCodeValidate(bootcampCode, bootcampCodeError);
     emailValidate(email, emailError);
-    if (FLnameValidate(lname, lnameError) && ageValidate(birthDate, birthDateError) && bootcampCodeValidate(bootcampCode, bootcampCodeError) && emailValidate(email, emailError))
+    if (FLnameValidate(lname, lnameError) && ageValidate(age, new_birthDate, birthDateError) && bootcampCodeValidate(bootcampCode, bootcampCodeError) && emailValidate(email, emailError))
         alert("نام : " + fname.value + '\n' +
             "نام خانوادگی : " + lname.value + '\n' +
-            "سن کاربر: " + ageValidate(birthDate, birthDateError)
+            "سن کاربر: " + age
         )
 }
 function FLnameValidate(flname, flnameError) {
@@ -44,9 +46,7 @@ function calculate_age(dob) {
     // Calculate the absolute value of the difference in years between the age Date object and the year 1970 (UNIX epoch)
     return Math.abs(age_dt.getUTCFullYear() - 1970);
 }
-function ageValidate(birthDate, birthDateError) {
-    let new_birthDate = new Date(birthDate.value);
-let age = calculate_age(new Date(new_birthDate.getUTCFullYear(), new_birthDate.getMonth(), new_birthDate.getDate()));
+function ageValidate(age, new_birthDate, birthDateError) {
     if (Date.now() - new_birthDate.getTime() < 0) {
         birthDateError.style.display = 'block';
         birthDateError.textContent = "You are not born yet";
@@ -57,7 +57,7 @@ let age = calculate_age(new Date(new_birthDate.getUTCFullYear(), new_birthDate.g
     }
     else if (age >= 18) {
         birthDateError.style.display = 'none';
-        return age;
+        return true;
     }
 }
 function bootcampCodeValidate(bootcampCode, bootcampCodeError) {
